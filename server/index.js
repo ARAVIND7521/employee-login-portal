@@ -60,7 +60,7 @@ app.post("/login/", (req, res) => {
 
 app.post("/my_info/", (req, res) => {
     res.setHeader('mysql', { "Content-Type": "text/plain" });
-    const sql = "select UserDetails.EmpID, UserCredential.UserName, UserCredential.Password, UserCredential.SecretID, UserDetails.First_Name, UserDetails.Last_Name, UserDetails.DOB, DATEDIFF(CURDATE(), DOJ)/365 as Experience, UserDetails.Designation, UserDetails.DOJ, UserDetails.Address, UserDetails.Zipcode, UserCredential.MobileNo, UserDetails.Is_Active, UserDetails.Profile from UserDetails inner join UserCredential on UserDetails.EmpID = UserCredential.EmpID where Is_Active = 1 and username = ?";
+    const sql = "select UserDetails.EmpID, UserCredential.UserName, UserCredential.Password, UserCredential.SecretID, UserDetails.First_Name, UserDetails.Last_Name, UserDetails.DOB, UserDetails.Age, DATEDIFF(CURDATE(), DOJ)/365 as Experience, UserDetails.Designation, UserDetails.DOJ, UserDetails.Address, UserDetails.Zipcode, UserCredential.MobileNo, UserDetails.Is_Active, UserDetails.Profile from UserDetails inner join UserCredential on UserDetails.EmpID = UserCredential.EmpID where Is_Active = 1 and username = ?";
     res.setHeader("Content-Type", "text/plain");
     db.query(sql, [username], (err, result) => {
         if (err) {
@@ -490,7 +490,8 @@ app.post("/edit_employee/", (req, res) => {
     const firstname = req.body.firstname;
     const lastname = req.body.lastname;
     const designation = req.body.designation;
-    const DOB = req.body.DOB
+    const DOB = req.body.DOB;
+    const Age = req.body.Age;
     const address = req.body.address;
     const zipcode = req.body.zipcode;
     const mobileno = req.body.mobileno;
@@ -502,9 +503,9 @@ app.post("/edit_employee/", (req, res) => {
             pass: 'yauifmhmgschtpwt'
         }
     });
-    const sql = "update userdetails set First_Name = ?, Last_Name = ?, Designation = ?, DOB = ?, Address = ?, Zipcode = ? where empid =?";
+    const sql = "update userdetails set First_Name = ?, Last_Name = ?, Designation = ?, DOB = ?, Age = ?, Address = ?, Zipcode = ? where empid =?";
     const sql1 = "update usercredential set MobileNo = ? where EmpID =?"
-    db.query(sql, [firstname, lastname, designation, DOB, address, zipcode, empid], (err) => {
+    db.query(sql, [firstname, lastname, designation, DOB, Age, address, zipcode, empid], (err) => {
         if (err) {
             console.log(err);
         }
